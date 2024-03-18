@@ -120,9 +120,13 @@ function! s:LongLines()
       endif
     else
       if len(w:LongLinesIds) != 0
-        for id in w:LongLinesIds
-          call matchdelete(id)
-        endfor
+        try
+          for id in w:LongLinesIds
+            call matchdelete(id)
+          endfor
+        catch /\v(E802|E803)/
+          " Safe to ignore: something called clearmatches()
+        endtry
         let w:LongLinesIds = []
       endif
     endif
